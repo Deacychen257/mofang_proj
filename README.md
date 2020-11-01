@@ -6,7 +6,7 @@
 2. python == 2.7
 3. tensorflow == 1.8.0
 4. flask == 1.0
-5. virtualenv == 
+5. virtualenv（python2版本）
 6. 更多模块要求在requirments.txt可见
 
 ### 1.2 启动过程（上述环境安装好后）
@@ -22,7 +22,7 @@
 1. code
     - 存放深度学习求解魔方模型的算法代码
     - code\scripts\nnetSolve.py为魔方求解接口
-    -code\savedModels为已训练好的模型
+    - code\savedModels为已训练好的模型
 2. mofang
     - 存放有使用flask框架开发的前后端文件
     - 文件作用介绍：
@@ -30,7 +30,7 @@
 	        -"/":该路由的功能为调取魔方html页面返回给客户端请求
 	        -"/initState":该路由的功能为调取初始化initState函数，完成初始化josn数据给ajax请求，完成初始化
 	        -"/solve":该路由的功能为调取sovle函数，完成对魔方的求解
-            -"tools.py":在调取solve函数时，在solve函数中再调取tools.py中求解魔方并返回数据的函数
+        - "tools.py":在调取solve函数时，在solve函数中再调取tools.py中求解魔方并返回数据的函数
         - static：存放网页静态js、css等资源
         - templates：存放魔方页面html文件
 3. data
