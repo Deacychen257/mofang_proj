@@ -1,75 +1,46 @@
-# DeepCube & DeepCubePlus
-flask实现的一个完整的项目，用于在自己的服务器上部署DeepCubeA算法并可视化。
-## 1. [DeepCube](http://czx.ac.cn/deepcube)
-### 1.1 特别注意
-1. 本项目要求在大内存下运行，本地运行需要2G内存
-2. app.py为服务器运行文件，其中两个solve择一即可
-    - 第一个solve函数为运行本地GPU计算
-    - 第二个solve函数为调用原网页解法API
-3. 在app.py中，增加这一行
-    ```
-    os.environ['CUDA_VISIBLE_DEVICES']='0'
-    ```
-   可以实现直接python app.py即可，作用是指定使用GPU 0
-### 1.2 环境要求
-1. Linux环境，非windows即可，本地mac、服务器CentOS、本地Ubuntu均测试成功
+# mofang_proj
+使用flask框架所实现的魔方项目，在本地服务器部署运行
+## 1. 项目说明（github地址：https://github.com/Deacychen257/mofang/tree/master，master分支）
+### 1.1 环境要求
+1. Linux环境（Ubuntu16.04测试成功）
 2. python == 2.7
 3. tensorflow == 1.8.0
 4. flask == 1.0
-5. 其他包要求在requirments.txt
+5. virtualenv == 
+6. 更多模块要求在requirments.txt可见
 
-### 1.3 启动过程
-```
-pip install -r requirements.txt
-cd flask
-python app.py
-```
-### 1.4 目录结构安排
+### 1.2 启动过程（上述环境安装好后）
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+1.  安装完虚拟环境后，使用命令“mkvirtualenv 环境名”创建虚拟环境,并使用命令“workon 环境名”进入虚拟环境
+2.  在虚拟环境下，使用“pip install -r requirements.txt”命令安装项目的依赖包
+3.  cd到项目文件夹下的mofang文件夹中
+4.  使用命令“python start.py”在本地部署项目并开启服务
+5.  flask默认打开端口5000，所以在浏览器中输入127.0.0.1:5000，即可访问魔方页面
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### 1.3 目录结构安排
 1. code
-    - 存放深度学习求解魔方模型的代码
-    - 详细解释参照code/README.md
-    - 其中code\scripts\nnetSolve.py为魔方求解接口
-2. flask
-    - 存放flask服务器后端
-    - 具体如下：
-        - app.py：服务器运行文件
-        - static：网页静态资源（js脚本等）
-        - templates：存放页面html文件
-3. environment
-    - 原深度学习求解魔方模型的文件夹，暂无用
-4. metadata
-    - 原深度学习求解魔方模型的文件夹，暂无用
-  
-### 1.5 路由
-1. "/"
-    - GET接口，返回最早版本魔方求解页面
-2. "/initState"
-    - POST接口，魔方求解页面初始化状态用
-3. "/solve"
-    - POST接口，魔方求解页面求解用，发送魔方状态序列，返回求解步骤等
-    
-### 1.6 参考
-1. Agostinelli, Forest, et al. "Solving the Rubik’s cube with deep reinforcement learning and search." Nature Machine Intelligence 1.8 (2019): 356-363.[[link]](https://www.nature.com/articles/s42256-019-0070-z.epdf?shared_access_token=-pCSsZa_J9bM8VyXLZLRctRgN0jAjWel9jnR3ZoTv0Osb8UCgUm5AQaSCMHWqWzsyV3KBcb13SAW-9IL1pAGd1HcSk40JSEjhoaBAi0ePvYh_5Dul6LvK0oJY1KI0ULo9O9HCut_y7aCTc93Th8m5g%3D%3D)
-2. [DeepCubeA](https://codeocean.com/capsule/5723040/tree/v1) Source Code.
+    - 存放深度学习求解魔方模型的算法代码
+    - code\scripts\nnetSolve.py为魔方求解接口
+    -code\savedModels为已训练好的模型
+2. mofang
+    - 存放有使用flask框架开发的前后端文件
+    - 文件作用介绍：
+        - start.py：开启服务器文件，包括路由与路由对应调取的执行函数
+	        -"/":该路由的功能为调取魔方html页面返回给客户端请求
+	        -"/initState":该路由的功能为调取初始化initState函数，完成初始化josn数据给ajax请求，完成初始化
+	        -"/solve":该路由的功能为调取sovle函数，完成对魔方的求解
+            -"tools.py":在调取solve函数时，在solve函数中再调取tools.py中求解魔方并返回数据的函数
+        - static：存放网页静态js、css等资源
+        - templates：存放魔方页面html文件
+3. data
+    - 保存用于训练魔方所需的数据集
 
-## 2. [DeepCubePlus](http://czx.ac.cn/deepcubeplus)
-### 2.1 更新说明
-在实现了DeepCube简单克隆之后，在Plus版中增加了以下前台功能：
-1. 自由输入方式：旋转序列、涂色
-2. 增加了单个旋转按钮
-3. 增加了验证模块
-4. 增加了魔方转动，展开图跟着变化
+### 1.4 注意事项
+*  在tools.py中指定了os.environ['CUDA_VISIBLE_DEVICES']='0'，即使用了0个GPU
+*  本项目没有拉取docker作为镜像，使用时可以自己制作镜像并根据requirements.txt安装环境，也可以拉取参考项目中的源镜像作为父镜像
 
-### 2.2 与普通版的不同文件
-1. flask/static/main.plus.js文件，增加的前台功能都是在这个文件里的
-2. flask/templates/index.plus.html文件，新版的主页
-3. flask/app.plus.py文件，新版的运行文件，重写了solve方法
-
-### 2.3 启动过程
-```
-pip install -r requirements.txt
-cd flask
-python app.plus.py
-```
-
-### 2.4 其他与普通版一致
+### 1.5 参考
+1. deepcube论文：Agostinelli, Forest, et al. "Solving the Rubik’s cube with deep reinforcement learning and search." Nature Machine Intelligence 1.8 (2019): 356-363.
+2. 后端参考：https://codeocean.com/capsule/5723040/tree/v1. && https://github.com/yeates/deepcube-full
+3. 前端参考：http://deepcube.igb.uci.edu
